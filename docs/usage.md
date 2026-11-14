@@ -2,10 +2,18 @@
 
 ## Installation
 
-CryQL supports Python 3.10+. On Kali/Debian-like systems, use the available
-`python3` command rather than requiring `python3.11`:
+CryQL supports Python 3.10 through Python 3.14. A virtual environment does not
+install CryQL; install the repository into it from the repository root:
 
 ```bash
+git clone https://github.com/mosannatahsin/cryql.git
+cd cryql
+test -f pyproject.toml && test -d cryql || {
+  echo "Run this command from the CryQL repository root." >&2
+  exit 1
+}
+pwd
+python3 --version
 sudo apt update
 sudo apt install python3-venv python3-full
 python3 -m venv .venv
@@ -16,9 +24,19 @@ python -m cryql --help
 cryql --help
 ```
 
+When you are not in the clone, use its absolute path:
+
+```bash
+python -m pip install /path/to/cryql
+```
+
 The virtual environment is required on distributions enforcing PEP 668
 (`externally-managed-environment`). Do not use system-wide pip; `pipx install .`
 is another safe option for an isolated CLI install.
+
+If `python -m pip install .` says that the directory is not installable, `.`
+refers to your current working directory, not automatically to the CryQL
+clone. Change to the clone root or use the absolute-path command above.
 
 ## Usage
 

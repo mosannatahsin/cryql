@@ -8,10 +8,19 @@ and [`docs/architecture.md`](docs/architecture.md).
 
 ## Installation
 
-CryQL supports Python 3.10 and newer. Use the `python3` interpreter available on
-your system; `python3.11` is optional, not required.
+CryQL supports Python 3.10 through Python 3.14. A virtual environment only
+isolates Python packages; it does not install CryQL by itself. Clone the
+repository, change into its root, and verify that `pyproject.toml` is present
+before installing:
 
 ```bash
+git clone https://github.com/mosannatahsin/cryql.git
+cd cryql
+test -f pyproject.toml && test -d cryql || {
+  echo "Run this command from the CryQL repository root." >&2
+  exit 1
+}
+pwd
 python3 --version
 python3 -m venv .venv
 source .venv/bin/activate
@@ -19,6 +28,13 @@ python -m pip install --upgrade pip
 python -m pip install .
 python -m cryql --help
 cryql --help
+```
+
+If the clone is somewhere else, install it with its absolute path instead of
+using `.`:
+
+```bash
+python -m pip install /path/to/cryql
 ```
 
 On Kali/Debian systems, install the virtual-environment support first if
@@ -44,8 +60,14 @@ For editable development installs, activate the venv and use
   `python3-full` when your distribution splits standard-library components).
 - `externally-managed-environment`: create and activate `.venv`, then run pip
   through that environment's `python`; do not use `sudo pip`.
-- `No module named cryql`: activate the venv where CryQL was installed, or
-  invoke it with that interpreter (`.venv/bin/python -m cryql --help`).
+- `ERROR: Directory '.' is not installable`: `.` means the current directory,
+  so change into the cloned CryQL repository root or use
+  `python -m pip install /path/to/cryql`.
+- `No module named cryql`: a venv alone does not install CryQL. Install the
+  repository into that venv, then activate it or invoke its interpreter
+  directly (`.venv/bin/python -m cryql --help`).
+- `cryql: command not found`: install CryQL into the active venv and ensure its
+  `bin` directory is on `PATH`, or use `.venv/bin/cryql --help`.
 - `cryql is a package and cannot be directly executed`: update the checkout and
   reinstall it; current releases include `cryql/__main__.py`, so both
   `python -m cryql --help` and `cryql --help` are supported.

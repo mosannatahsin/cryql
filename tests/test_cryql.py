@@ -32,6 +32,16 @@ def test_packaging_declares_supported_python_range():
     assert re.search(r'^python\s*=\s*">=3\.10,<4\.0"$', content, re.MULTILINE)
 
 
+def test_installation_docs_guard_against_wrong_working_directory():
+    root = Path(__file__).parents[1]
+    readme = (root / "README.md").read_text(encoding="utf-8")
+    usage = (root / "docs" / "usage.md").read_text(encoding="utf-8")
+    for document in (readme, usage):
+        assert "test -f pyproject.toml" in document
+        assert "python -m pip install /path/to/cryql" in document
+        assert "virtual environment" in document
+
+
 def test_introspection_graph_and_sdl():
     graph = SchemaGraph.from_introspection({"data": {"__schema": {"queryType": {"name": "Query"}, "mutationType": None, "subscriptionType": None, "types": [{"name": "Query", "kind": "OBJECT", "fields": [{"name": "user", "args": [], "type": {"kind": "SCALAR", "name": "String", "ofType": None}}]}]}}})
     assert graph.types["Query"].fields["user"].confidence is Confidence.CONFIRMED
