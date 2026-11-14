@@ -8,17 +8,47 @@ and [`docs/architecture.md`](docs/architecture.md).
 
 ## Installation
 
-CryQL supports Python 3.11+:
+CryQL supports Python 3.10 and newer. Use the `python3` interpreter available on
+your system; `python3.11` is optional, not required.
 
 ```bash
-python3.11 -m venv .venv
+python3 --version
+python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install .
 python -m cryql --help
+cryql --help
 ```
 
-For editable development installs, use `python -m pip install -e .`.
+On Kali/Debian systems, install the virtual-environment support first if
+`python3 -m venv` reports that `ensurepip` is unavailable:
+
+```bash
+sudo apt update
+sudo apt install python3-venv python3-full
+```
+
+Do not install CryQL into the system interpreter. This avoids Debian's
+`externally-managed-environment` (PEP 668) error. If you prefer an isolated
+application install, `pipx install .` also provides the `cryql` command.
+
+For editable development installs, activate the venv and use
+`python -m pip install -e .`.
+
+### Troubleshooting
+
+- `python3.11: command not found`: use `python3`; CryQL does not require the
+  `python3.11` executable specifically.
+- `python3 -m venv .venv` cannot run `ensurepip`: install `python3-venv` (and
+  `python3-full` when your distribution splits standard-library components).
+- `externally-managed-environment`: create and activate `.venv`, then run pip
+  through that environment's `python`; do not use `sudo pip`.
+- `No module named cryql`: activate the venv where CryQL was installed, or
+  invoke it with that interpreter (`.venv/bin/python -m cryql --help`).
+- `cryql is a package and cannot be directly executed`: update the checkout and
+  reinstall it; current releases include `cryql/__main__.py`, so both
+  `python -m cryql --help` and `cryql --help` are supported.
 
 ## CLI
 

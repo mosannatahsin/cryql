@@ -1,5 +1,27 @@
 # CryQL usage
 
+## Installation
+
+CryQL supports Python 3.10+. On Kali/Debian-like systems, use the available
+`python3` command rather than requiring `python3.11`:
+
+```bash
+sudo apt update
+sudo apt install python3-venv python3-full
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install .
+python -m cryql --help
+cryql --help
+```
+
+The virtual environment is required on distributions enforcing PEP 668
+(`externally-managed-environment`). Do not use system-wide pip; `pipx install .`
+is another safe option for an isolated CLI install.
+
+## Usage
+
 ```bash
 python -m cryql -d https://example.test/graphql -o schema.json
 cryql -d https://example.test/graphql --format sdl -o schema.graphql

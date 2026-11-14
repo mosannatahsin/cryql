@@ -64,7 +64,8 @@ async def run(args: argparse.Namespace) -> None:
     logging.getLogger("cryql").info("wrote %s", args.output)
 
 
-def main(argv: Optional[List[str]] = None) -> None:
+def main(argv: Optional[List[str]] = None) -> int:
     args = build_parser().parse_args(argv)
     logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO, format="%(levelname)s %(message)s")
     asyncio.run(run(args))
+    return 0

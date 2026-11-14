@@ -1,4 +1,8 @@
 import json
+import re
+import subprocess
+import sys
+from pathlib import Path
 
 from cryql.artifacts import extract_operations
 from cryql.discovery import candidate_endpoints, validate_candidates
@@ -9,6 +13,23 @@ from cryql.recovery import _selection_type
 from cryql.export import render
 from cryql.planner import AdaptivePlanner, Hypothesis
 from cryql.schema import SchemaGraph
+
+
+def test_module_entrypoint_displays_help():
+    result = subprocess.run(
+        [sys.executable, "-m", "cryql", "--help"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert "Evidence-driven GraphQL schema intelligence" in result.stdout
+
+
+def test_packaging_declares_supported_python_range():
+    pyproject = Path(__file__).parents[1] / "pyproject.toml"
+    content = pyproject.read_text(encoding="utf-8")
+    assert re.search(r'^python\s*=\s*">=3\.10,<4\.0"$', content, re.MULTILINE)
 
 
 def test_introspection_graph_and_sdl():
